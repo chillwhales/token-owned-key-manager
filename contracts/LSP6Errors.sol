@@ -223,3 +223,8 @@ error KeyManagerCannotBeSetAsExtensionForLSP20Functions();
  * @param dataValue The data value that has an invalid length.
  */
 error InvalidDataValuesForDataKeys(bytes32 dataKey, bytes dataValue);
+
+error InvalidCollectionAddress();
+error InvalidTokenId();
+error CollectionAddressNotSet();
+error TokenIdNotSet();

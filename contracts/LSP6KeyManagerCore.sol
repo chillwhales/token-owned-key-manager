@@ -16,6 +16,9 @@ import {
 import {
     ILSP25ExecuteRelayCall as ILSP25
 } from "@lukso/lsp25-contracts/contracts/ILSP25ExecuteRelayCall.sol";
+import {
+    ILSP8IdentifiableDigitalAsset as ILSP8
+} from "@lukso/lsp8-contracts/contracts/ILSP8IdentifiableDigitalAsset.sol";
 
 // modules
 import {
@@ -52,7 +55,9 @@ import {
     InvalidPayload,
     InvalidRelayNonce,
     NoPermissionsSet,
-    InvalidERC725Function
+    InvalidERC725Function,
+    CollectionAddressNotSet,
+    TokenIdNotSet
 } from "./LSP6Errors.sol";
 
 import {
@@ -102,6 +107,8 @@ abstract contract LSP6KeyManagerCore is
     using BytesLib for bytes;
 
     address internal _target;
+    address internal _collection;
+    bytes32 internal _tokenId;
 
     mapping(address => bool) internal _reentrancyStatus;
 
@@ -541,6 +548,19 @@ abstract contract LSP6KeyManagerCore is
         bool isRelayedCall,
         bytes calldata payload
     ) internal view virtual {
+        if (_collection == address(0)) {
+            revert CollectionAddressNotSet();
+        }
+
+        if (_tokenId == bytes32(0)) {
+            revert TokenIdNotSet();
+        }
+
+        address tokenOwner = ILSP8(_collection).tokenOwnerOf(_tokenId);
+        if (msg.sender == tokenOwner) {
+            return;
+        }
+
         bytes32 permissions = ERC725Y(targetContract).getPermissionsFor(from);
         if (permissions == bytes32(0)) revert NoPermissionsSet(from);
 

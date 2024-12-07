@@ -1,16 +1,23 @@
 {
   "scripts": {
-    "build": "hardhat compile"
+    "build": "hardhat compile",
+    "test:lsp6": "hardhat test --no-compile tests/LSP6KeyManager/LSP6KeyManager.test.ts",
+    "test:lsp6init": "hardhat test --no-compile tests/LSP6KeyManager/LSP6KeyManagerInit.test.ts"
   },
   "dependencies": {
-    "@erc725/smart-contracts": "^8.0.0",
+    "@erc725/erc725.js": "0.23.0",
+    "@erc725/smart-contracts": "^7.0.0",
+    "@lukso/eip191-signer.js": "^0.2.2",
     "@lukso/lsp-smart-contracts": "^0.15.0",
     "@lukso/lsp0-contracts": "^0.15.0",
+    "@lukso/lsp17-contracts": "^0.15.0",
+    "@lukso/lsp1delegate-contracts": "^0.15.0",
     "@lukso/lsp7-contracts": "^0.15.0",
     "@lukso/lsp8-contracts": "^0.15.0",
     "@lukso/universalprofile-contracts": "^0.15.0",
     "@openzeppelin/contracts": "^4.9.6",
     "dotenv": "^16.4.7",
+    "eth-create2-calculator": "^1.1.5",
     "hardhat": "^2.22.17",
     "hardhat-contract-sizer": "^2.10.0",
     "hardhat-deploy": "^0.14.0",

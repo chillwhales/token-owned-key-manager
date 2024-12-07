@@ -14,7 +14,15 @@ import {LSP6KeyManager} from "../LSP6KeyManager.sol";
 contract KeyManagerInternalTester is LSP6KeyManager {
     using LSP6Utils for *;
 
-    constructor(address _account) LSP6KeyManager(_account) {}
+    constructor(
+        address target_,
+        address collection_,
+        bytes32 tokenId_
+    ) LSP6KeyManager(
+        target_,
+        collection_,
+        tokenId_
+    ) {}
 
     function getPermissionsFor(address _address) public view returns (bytes32) {
         return ERC725Y(_target).getPermissionsFor(_address);

@@ -6,7 +6,11 @@ import {
     Initializable
 } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {LSP6KeyManagerCore} from "./LSP6KeyManagerCore.sol";
-import {InvalidLSP6Target} from "./LSP6Errors.sol";
+import {
+    InvalidLSP6Target,
+    InvalidCollectionAddress,
+    InvalidTokenId
+} from "./LSP6Errors.sol";
 
 /**
  * @title Proxy implementation of a contract acting as a controller of an ERC725 Account, using permissions stored in the ERC725Y storage
@@ -17,8 +21,17 @@ abstract contract LSP6KeyManagerInitAbstract is
     Initializable,
     LSP6KeyManagerCore
 {
-    function _initialize(address target_) internal virtual onlyInitializing {
+    function _initialize(
+        address target_,
+        address collection_,
+        bytes32 tokenId_
+    ) internal virtual onlyInitializing {
         if (target_ == address(0)) revert InvalidLSP6Target();
+        if (collection_ == address(0)) revert InvalidCollectionAddress();
+        if (tokenId_ == bytes32(0)) revert InvalidTokenId();
+
         _target = target_;
+        _collection = collection_;
+        _tokenId = tokenId_;
     }
 }

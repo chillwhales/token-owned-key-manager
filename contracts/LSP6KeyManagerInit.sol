@@ -26,7 +26,15 @@ contract LSP6KeyManagerInit is LSP6KeyManagerInitAbstract, Version {
      *
      * @param target_ The address of the contract to control and forward calldata payloads to.
      */
-    function initialize(address target_) external virtual initializer {
-        LSP6KeyManagerInitAbstract._initialize(target_);
+    function initialize(
+        address target_,
+        address collection_,
+        bytes32 tokenId_
+    ) external virtual initializer {
+        LSP6KeyManagerInitAbstract._initialize(
+            target_,
+            collection_,
+            tokenId_
+        );
     }
 }
