@@ -5,16 +5,25 @@ import {
   ContractTransactionResponse,
   hexlify,
   randomBytes,
+  toBeHex,
 } from "ethers";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 // constants
-import { ERC725YDataKeys } from "@lukso/lsp-smart-contracts";
+import {
+  ERC725YDataKeys,
+  LSP4_TOKEN_TYPES,
+  LSP8_TOKEN_ID_FORMAT,
+} from "@lukso/lsp-smart-contracts";
 import { OPERATION_TYPES } from "@lukso/lsp0-contracts";
 import { PERMISSIONS } from "@lukso/lsp6-contracts";
 import { LSP25_VERSION } from "@lukso/lsp25-contracts";
 
-import { LSP6KeyManager, LSP6KeyManager__factory } from "../../../types";
+import {
+  LSP6KeyManager,
+  LSP6KeyManager__factory,
+  LSP8Mintable__factory,
+} from "../../../types";
 
 // setup
 import { LSP6TestContext } from "../../utils/context";
@@ -43,12 +52,20 @@ export const shouldBehaveLikePermissionChangeOwner = (
     canChangeOwner = context.accounts[1];
     cannotChangeOwner = context.accounts[2];
 
+    const lsp8 = await new LSP8Mintable__factory(context.accounts[0]).deploy(
+      "name",
+      "symbol",
+      context.accounts[0].address,
+      LSP4_TOKEN_TYPES.COLLECTION,
+      LSP8_TOKEN_ID_FORMAT.NUMBER
+    );
+
     newKeyManager = await new LSP6KeyManager__factory(
       context.mainController
     ).deploy(
       await context.universalProfile.getAddress(),
-      hexlify(randomBytes(20)),
-      hexlify(randomBytes(32))
+      lsp8.target,
+      toBeHex(1, 32)
     );
 
     transferOwnershipPayload =
@@ -239,12 +256,22 @@ export const shouldBehaveLikePermissionChangeOwner = (
       });
 
       it("should override the pendingOwner when transferOwnership(...) is called twice", async () => {
+        const lsp8 = await new LSP8Mintable__factory(
+          context.accounts[0]
+        ).deploy(
+          "name",
+          "symbol",
+          context.accounts[0].address,
+          LSP4_TOKEN_TYPES.COLLECTION,
+          LSP8_TOKEN_ID_FORMAT.NUMBER
+        );
+
         const overridenPendingOwner = await new LSP6KeyManager__factory(
           context.mainController
         ).deploy(
           await context.universalProfile.getAddress(),
-          hexlify(randomBytes(20)),
-          hexlify(randomBytes(32))
+          lsp8.target,
+          toBeHex(1, 32)
         );
 
         await context.keyManager
@@ -270,12 +297,20 @@ export const shouldBehaveLikePermissionChangeOwner = (
     });
 
     it("should revert", async () => {
+      const lsp8 = await new LSP8Mintable__factory(context.accounts[0]).deploy(
+        "name",
+        "symbol",
+        context.accounts[0].address,
+        LSP4_TOKEN_TYPES.COLLECTION,
+        LSP8_TOKEN_ID_FORMAT.NUMBER
+      );
+
       const notPendingKeyManager = await new LSP6KeyManager__factory(
         context.accounts[5]
       ).deploy(
         await context.universalProfile.getAddress(),
-        hexlify(randomBytes(20)),
-        hexlify(randomBytes(32))
+        lsp8.target,
+        toBeHex(1, 32)
       );
 
       const payload =

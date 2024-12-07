@@ -4,6 +4,7 @@ import { LSP6TestContext } from "../utils/context";
 import {
   LSP6KeyManagerInit,
   LSP6KeyManagerInit__factory,
+  LSP8Mintable__factory,
   UniversalProfileInit,
   UniversalProfileInit__factory,
 } from "../../types";
@@ -12,7 +13,11 @@ import {
   shouldBehaveLikeLSP6,
   shouldInitializeLikeLSP6,
 } from "./LSP6KeyManager.behaviour";
-import { hexlify, randomBytes } from "ethers";
+import { hexlify, randomBytes, toBeHex } from "ethers";
+import {
+  LSP4_TOKEN_TYPES,
+  LSP8_TOKEN_ID_FORMAT,
+} from "@lukso/lsp-smart-contracts";
 
 describe("LSP6KeyManager with proxy", () => {
   let context: LSP6TestContext;
@@ -55,10 +60,18 @@ describe("LSP6KeyManager with proxy", () => {
       }
     );
 
+    const lsp8 = await new LSP8Mintable__factory(context.accounts[0]).deploy(
+      "name",
+      "symbol",
+      context.accounts[0].address,
+      LSP4_TOKEN_TYPES.COLLECTION,
+      LSP8_TOKEN_ID_FORMAT.NUMBER
+    );
+
     await context.keyManager["initialize(address)"](
       await context.universalProfile.getAddress(),
-      hexlify(randomBytes(20)),
-      hexlify(randomBytes(32))
+      lsp8.target,
+      toBeHex(1, 32)
     );
 
     return context;
@@ -82,11 +95,19 @@ describe("LSP6KeyManager with proxy", () => {
         context.accounts[0]
       ).deploy();
 
+      const lsp8 = await new LSP8Mintable__factory(context.accounts[0]).deploy(
+        "name",
+        "symbol",
+        context.accounts[0].address,
+        LSP4_TOKEN_TYPES.COLLECTION,
+        LSP8_TOKEN_ID_FORMAT.NUMBER
+      );
+
       await expect(
         baseKM.initialize(
           context.accounts[0].address,
-          hexlify(randomBytes(20)),
-          hexlify(randomBytes(32))
+          lsp8.target,
+          toBeHex(1, 32)
         )
       ).to.be.revertedWith("Initializable: contract is already initialized");
     });

@@ -556,10 +556,11 @@ abstract contract LSP6KeyManagerCore is
             revert TokenIdNotSet();
         }
 
-        address tokenOwner = ILSP8(_collection).tokenOwnerOf(_tokenId);
-        if (msg.sender == tokenOwner) {
-            return;
-        }
+        try ILSP8(_collection).tokenOwnerOf(_tokenId) returns (address tokenOwner) {
+            if (msg.sender == tokenOwner) {
+                return;
+            }
+        } catch {}
 
         bytes32 permissions = ERC725Y(targetContract).getPermissionsFor(from);
         if (permissions == bytes32(0)) revert NoPermissionsSet(from);
