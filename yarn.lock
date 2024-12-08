@@ -766,7 +766,7 @@
   resolved "https://registry.yarnpkg.com/@lukso/lsp20-contracts/-/lsp20-contracts-0.15.0.tgz#2547354e78555a883c92110221a89b463f9641cf"
   integrity sha512-TfAM9tN6zzIQXq0xq3uE0zkBfVjQ52jXY69fvMSBqs/PsKV49J/T4tH9pMqazTgCF1PlAOnoA8m2MTdjJ7OCqA==
 
-"@lukso/lsp23-contracts@~0.15.0":
+"@lukso/lsp23-contracts@^0.15.0", "@lukso/lsp23-contracts@~0.15.0":
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/@lukso/lsp23-contracts/-/lsp23-contracts-0.15.0.tgz#5d0b6951e003145cb36cad4c0df0b180a2518708"
   integrity sha512-IQqvK19PyLEAb/6gscLqn1MVy9zKOflQCVNIQmjgMhv6d89FvItwfvLk81aycSUELX5XANbzK14dM0x/ydEQAg==

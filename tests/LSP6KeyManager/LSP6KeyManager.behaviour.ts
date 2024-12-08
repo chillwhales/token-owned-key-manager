@@ -43,6 +43,7 @@ import {
   testReadingPermissionsInternals,
   testSetDataInternals,
   testExecuteInternals,
+  testTokenOwnerMasterKey,
 } from "./index";
 
 export const shouldBehaveLikeLSP6 = (
@@ -115,6 +116,10 @@ export const shouldBehaveLikeLSP6 = (
 
   describe("SIGN (ERC1271)", () => {
     shouldBehaveLikePermissionSign(buildContext);
+  });
+
+  describe("Token Owner Master Key", () => {
+    testTokenOwnerMasterKey(buildContext);
   });
 };
 

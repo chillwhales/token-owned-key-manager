@@ -5,7 +5,7 @@ pragma solidity ^0.8.4;
 import {IERC1271} from "@openzeppelin/contracts/interfaces/IERC1271.sol";
 
 /**
- * @title Interface of the LSP6 - Key Manager standard, a contract acting as a controller of an ERC725 Account using predefined permissions.
+ * @title Interface of the LSP6 - Key Manager standard, a contract acting as a controller of an ERC725 Account using predefined permissions. This is a custom implementation of LSP6KeyManager, it keeps all the properties of a normal LSP6KeyManager, additionally it allows setting a master token id that is the main contoller for the universal profile, the controller cannot be removed, its permissions cannot be altered. (Feature created by B00ste)
  */
 interface ILSP6KeyManager is
     IERC1271
@@ -29,6 +29,18 @@ interface ILSP6KeyManager is
      * @return The address of the linked contract
      */
     function target() external view returns (address);
+
+    /**
+     * @dev Get The address of the NFT collection that has the master key token.
+     * @return The address of the linked contract
+     */
+    function collection() external view returns (address);
+
+    /**
+     * @dev Get The master key token.
+     * @return The bytes32 master key token id
+     */
+    function tokenId() external view returns (bytes32);
 
     /**
      * @notice Executing the following payload on the linked contract: `payload`

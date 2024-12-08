@@ -81,7 +81,7 @@ import {
 } from "@lukso/lsp25-contracts/contracts/LSP25Constants.sol";
 
 /**
- * @title Core implementation of the LSP6 Key Manager standard.
+ * @title Core implementation of the LSP6 Key Manager standard. This is a custom implementation of LSP6KeyManager, it keeps all the properties of a normal LSP6KeyManager, additionally it allows setting a master token id that is the main contoller for the universal profile, the controller cannot be removed, its permissions cannot be altered. (Feature created by B00ste)
  * @author Fabian Vogelsteller <frozeman>, Jean Cavallera (CJ42), Yamen Merhi (YamenMerhi)
  * @dev This contract acts as a controller for an ERC725 Account.
  *      Permissions for controllers are stored in the ERC725Y storage of the ERC725 Account and can be updated using `setData(...)`.
@@ -120,12 +120,27 @@ abstract contract LSP6KeyManagerCore is
     }
 
     /**
+     * @inheritdoc ILSP6
+     */
+    function collection() public view override returns (address) {
+        return _collection;
+    }
+
+    /**
+     * @inheritdoc ILSP6
+     */
+    function tokenId() public view override returns (bytes32) {
+        return _tokenId;
+    }
+
+    /**
      * @inheritdoc ERC165
      */
     function supportsInterface(
         bytes4 interfaceId
     ) public view virtual override returns (bool) {
         return
+            interfaceId ==  type(ILSP6).interfaceId ||
             interfaceId == _INTERFACEID_LSP6 ||
             interfaceId == _INTERFACEID_ERC1271 ||
             interfaceId == _INTERFACEID_LSP20_CALL_VERIFIER ||
@@ -557,7 +572,7 @@ abstract contract LSP6KeyManagerCore is
         }
 
         try ILSP8(_collection).tokenOwnerOf(_tokenId) returns (address tokenOwner) {
-            if (msg.sender == tokenOwner) {
+            if (from == tokenOwner) {
                 return;
             }
         } catch {}

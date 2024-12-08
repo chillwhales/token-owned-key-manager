@@ -3,7 +3,12 @@
     "build": "hardhat compile",
     "clean": "hardhat clean",
     "test:lsp6": "hardhat test --no-compile tests/LSP6KeyManager/LSP6KeyManager.test.ts",
-    "test:lsp6init": "hardhat test --no-compile tests/LSP6KeyManager/LSP6KeyManagerInit.test.ts"
+    "test:lsp6init": "hardhat test --no-compile tests/LSP6KeyManager/LSP6KeyManagerInit.test.ts",
+    "coverage": "hardhat coverage --testfiles tests/LSP6KeyManager",
+    "deploy:testnet": "hardhat deploy --network luksoTestnet --tags base --write true",
+    "verify:testnet": "hardhat verify-all --network luksoTestnet",
+    "deploy:mainnet": "hardhat deploy --network luksoMainnet --tags base --write true",
+    "verify:mainnet": "hardhat verify-all --network luksoMainnet"
   },
   "dependencies": {
     "@erc725/erc725.js": "0.23.0",
@@ -13,6 +18,7 @@
     "@lukso/lsp0-contracts": "^0.15.0",
     "@lukso/lsp17-contracts": "^0.15.0",
     "@lukso/lsp1delegate-contracts": "^0.15.0",
+    "@lukso/lsp23-contracts": "^0.15.0",
     "@lukso/lsp7-contracts": "^0.15.0",
     "@lukso/lsp8-contracts": "^0.15.0",
     "@lukso/universalprofile-contracts": "^0.15.0",

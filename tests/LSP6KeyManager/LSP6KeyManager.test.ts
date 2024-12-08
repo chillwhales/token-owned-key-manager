@@ -14,7 +14,7 @@ import {
   shouldBehaveLikeLSP6,
   testLSP6InternalFunctions,
 } from "./LSP6KeyManager.behaviour";
-import { hexlify, randomBytes, toBeHex } from "ethers";
+import { toBeHex } from "ethers";
 import {
   LSP4_TOKEN_TYPES,
   LSP8_TOKEN_ID_FORMAT,
@@ -36,7 +36,7 @@ describe("LSP6KeyManager with constructor", () => {
     const lsp8 = await new LSP8Mintable__factory(accounts[0]).deploy(
       "name",
       "symbol",
-      accounts[0].address,
+      accounts[1],
       LSP4_TOKEN_TYPES.COLLECTION,
       LSP8_TOKEN_ID_FORMAT.NUMBER
     );

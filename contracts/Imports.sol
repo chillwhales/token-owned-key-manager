@@ -8,3 +8,4 @@ import {LSP1UniversalReceiverDelegateUP} from "@lukso/lsp1delegate-contracts/con
 import {LSP7Mintable} from "@lukso/lsp7-contracts/contracts/presets/LSP7Mintable.sol";
 import {LSP7MintableInit} from "@lukso/lsp7-contracts/contracts/presets/LSP7MintableInit.sol";
 import {LSP8Mintable} from "@lukso/lsp8-contracts/contracts/presets/LSP8Mintable.sol";
+import {LSP23LinkedContractsFactory} from "@lukso/lsp23-contracts/contracts/LSP23LinkedContractsFactory.sol";

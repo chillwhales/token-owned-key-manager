@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { LSP6TestContext } from "../utils/context";
+import { LSP6TestContext, LSP6TestInitContext } from "../utils/context";
 import {
   LSP6KeyManagerInit,
   LSP6KeyManagerInit__factory,
@@ -13,18 +13,18 @@ import {
   shouldBehaveLikeLSP6,
   shouldInitializeLikeLSP6,
 } from "./LSP6KeyManager.behaviour";
-import { hexlify, randomBytes, toBeHex } from "ethers";
+import { toBeHex } from "ethers";
 import {
   LSP4_TOKEN_TYPES,
   LSP8_TOKEN_ID_FORMAT,
 } from "@lukso/lsp-smart-contracts";
 
 describe("LSP6KeyManager with proxy", () => {
-  let context: LSP6TestContext;
+  let context: LSP6TestInitContext;
 
   const buildProxyTestContext = async (
     initialFunding?: bigint
-  ): Promise<LSP6TestContext> => {
+  ): Promise<LSP6TestInitContext> => {
     const accounts = await ethers.getSigners();
     const mainController = accounts[0];
 
@@ -52,23 +52,20 @@ describe("LSP6KeyManager with proxy", () => {
     };
   };
 
-  const initializeProxies = async (context: LSP6TestContext) => {
-    await context.universalProfile["initialize(address)"](
-      context.mainController.address,
-      {
-        value: context.initialFunding,
-      }
-    );
+  const initializeProxies = async (context: LSP6TestInitContext) => {
+    await context.universalProfile.initialize(context.mainController.address, {
+      value: context.initialFunding,
+    });
 
     const lsp8 = await new LSP8Mintable__factory(context.accounts[0]).deploy(
       "name",
       "symbol",
-      context.accounts[0].address,
+      context.accounts[1],
       LSP4_TOKEN_TYPES.COLLECTION,
       LSP8_TOKEN_ID_FORMAT.NUMBER
     );
 
-    await context.keyManager["initialize(address)"](
+    await context.keyManager.initialize(
       await context.universalProfile.getAddress(),
       lsp8.target,
       toBeHex(1, 32)
@@ -84,7 +81,9 @@ describe("LSP6KeyManager with proxy", () => {
         accounts[0]
       ).deploy();
 
-      const linkedTarget = await keyManagerBaseContract.target.staticCall();
+      const linkedTarget = await keyManagerBaseContract
+        .getFunction("target")
+        .call(null);
       expect(linkedTarget).to.equal(ethers.ZeroAddress);
     });
 
