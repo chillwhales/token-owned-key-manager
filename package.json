@@ -7,8 +7,10 @@
     "coverage": "hardhat coverage --testfiles tests/LSP6KeyManager",
     "deploy:testnet": "hardhat deploy --network luksoTestnet --tags base --write true",
     "verify:testnet": "hardhat verify-all --network luksoTestnet",
+    "deploy:proxy:testnet": "hardhat run scripts/deployProxy.ts --network luksoTestnet",
     "deploy:mainnet": "hardhat deploy --network luksoMainnet --tags base --write true",
-    "verify:mainnet": "hardhat verify-all --network luksoMainnet"
+    "verify:mainnet": "hardhat verify-all --network luksoMainnet",
+    "deploy:proxy:mainnet": "hardhat run scripts/deployProxy.ts --network luksoMainnet"
   },
   "dependencies": {
     "@erc725/erc725.js": "0.23.0",
